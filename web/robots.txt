@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+Disallow: /login
+Disallow: /signup
+Disallow: /verify
+Disallow: /reset
+Disallow: /profile
+Disallow: /my-trips
+Disallow: /favorites
+Disallow: /notifications
+Disallow: /settings
+Disallow: /my-information
+Disallow: /privacy-security
+Disallow: /booking/
+Disallow: /track/
+Disallow: /splash
+Disallow: /onboarding
+
+Sitemap: https://pharatrip.com/sitemap.xml

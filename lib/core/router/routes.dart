@@ -1,0 +1,21 @@
+abstract final class AppRoutes {
+  static const splash = '/splash';
+  static const onboarding = '/onboarding';
+  static const login = '/login';
+  static const signup = '/signup';
+  static const verify = '/verify';
+  static const reset = '/reset';
+  static const home = '/home';
+  static const myTrips = '/my-trips';
+  static const explore = '/explore';
+  static const favorites = '/favorites';
+  static const profile = '/profile';
+  static const notifications = '/notifications';
+  static const helpSupport = '/help-support';
+  static const settings = '/settings';
+  static const myInformation = '/my-information';
+  static const privacySecurity = '/privacy-security';
+  static const faq = '/faq';
+  static const supportChat = '/support-chat';
+  static const contactSupport = '/contact-support';
+}
