@@ -274,8 +274,7 @@ class FrequentlyAskedQuestionsScreen extends StatelessWidget {
   );
 }
 
-Widget _wideSupportChat(BuildContext context) {
-  final state = context.findAncestorStateOfType<_SupportChatScreenState>();
+Widget _wideSupportChat(BuildContext context, _SupportChatScreenState state) {
   return Row(
     children: [
       Expanded(
@@ -330,7 +329,7 @@ Widget _wideSupportChat(BuildContext context) {
                 child: ListView(
                   padding: const EdgeInsets.all(24),
                   children: [
-                    for (final message in state?._messages ?? const [])
+                    for (final message in state._messages)
                       _chatBubble(message.text, message.sent),
                     _chatBubble(
                       'Hello Ahmed, how can we make your next trip special? ✨',
@@ -347,21 +346,21 @@ Widget _wideSupportChat(BuildContext context) {
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: TextField(
-                  controller: state?._messageController,
-                  onSubmitted: (value) => state?._sendMessage(value),
+                  controller: state._messageController,
+                  onSubmitted: state._sendMessage,
                   decoration: InputDecoration(
                     hintText: 'Type your message...',
                     filled: true,
                     fillColor: Colors.white,
                     prefixIcon: IconButton(
-                      onPressed: () => state?._pickAttachment(),
+                      onPressed: state._pickAttachment,
                       icon: const Icon(
                         Icons.attach_file,
                         color: AppColors.teal,
                       ),
                     ),
                     suffixIcon: IconButton(
-                      onPressed: () => state?._sendMessage(),
+                      onPressed: state._sendMessage,
                       icon: const Icon(Icons.send, color: AppColors.teal),
                     ),
                     border: OutlineInputBorder(
@@ -441,7 +440,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
         : null,
     body: AppNavigationBody(
       selectedIndex: -1,
-      child: _wideSupportChat(context),
+      child: _wideSupportChat(context, this),
       /*
           SafeArea(
               child: Column(
