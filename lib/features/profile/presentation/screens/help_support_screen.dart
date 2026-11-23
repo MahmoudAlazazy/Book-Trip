@@ -417,10 +417,17 @@ Widget _chatBubble(
       : AlignmentDirectional.centerStart,
   child: Container(
     margin: const EdgeInsets.only(bottom: 14),
-    padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 13),
+    padding: attachment == null
+        ? const EdgeInsets.symmetric(horizontal: 18, vertical: 13)
+        : const EdgeInsets.all(6),
     decoration: BoxDecoration(
-      color: sent ? const Color(0xFF0A7D89) : Colors.white,
-      borderRadius: BorderRadius.circular(20),
+      color: attachment == null
+          ? (sent ? const Color(0xFF0A7D89) : Colors.white)
+          : const Color(0xFFF8FAFB),
+      border: attachment == null
+          ? null
+          : Border.all(color: const Color(0xFFD8DEE2), width: 1),
+      borderRadius: BorderRadius.circular(attachment == null ? 20 : 10),
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -445,8 +452,8 @@ Widget _chatBubble(
               }
               return Image.memory(
                 Uint8List.fromList(snapshot.data!),
-                width: 220,
-                height: 160,
+                width: 190,
+                height: 135,
                 fit: BoxFit.cover,
               );
             },
@@ -456,7 +463,9 @@ Widget _chatBubble(
           Text(
             _egyptianTime(time),
             style: TextStyle(
-              color: sent ? Colors.white70 : Colors.blueGrey.shade500,
+              color: attachment == null
+                  ? (sent ? Colors.white70 : Colors.blueGrey.shade500)
+                  : Colors.blueGrey.shade500,
               fontSize: 10,
             ),
           ),
