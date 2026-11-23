@@ -332,10 +332,11 @@ Widget _wideSupportChat(BuildContext context, _SupportChatScreenState state) {
                   children: [
                     for (final message in state._messages.reversed)
                       _chatBubble(message.text, message.sent),
-                    _chatBubble(
-                      'ممتاز! يسعدني مساعدتك في حجز رحلتك القادمة.',
-                      true,
-                    ),
+                    if (false)
+                      _chatBubble(
+                        'ممتاز! يسعدني مساعدتك في حجز رحلتك القادمة.',
+                        true,
+                      ),
                   ],
                 ),
               ),
@@ -411,6 +412,12 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
   void _addDummyMessage(String text) {
     if (text.trim().isEmpty || !mounted) return;
     setState(() => _messages.add((text: text.trim(), sent: true)));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _messages.clear();
   }
 
   void _sendMessage([String? value]) {
