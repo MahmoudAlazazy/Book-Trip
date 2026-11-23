@@ -332,7 +332,7 @@ Widget _wideSupportChat(BuildContext context, _SupportChatScreenState state) {
                   children: [
                     for (final message in state._messages.reversed)
                       _chatBubble(message.text, message.sent),
-                    if (false)
+                    if (state._messages.isEmpty && state._messages.isNotEmpty)
                       _chatBubble(
                         'ممتاز! يسعدني مساعدتك في حجز رحلتك القادمة.',
                         true,
