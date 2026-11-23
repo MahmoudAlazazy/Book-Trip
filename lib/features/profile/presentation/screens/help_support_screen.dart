@@ -318,20 +318,24 @@ Widget _wideSupportChat(BuildContext context, _SupportChatScreenState state) {
                             'Travel Support',
                             style: TextStyle(fontWeight: FontWeight.w800),
                           ),
-                          Container(
-                            width: 9,
-                            height: 9,
-                            margin: const EdgeInsets.only(top: 3, bottom: 2),
-                            decoration: BoxDecoration(
-                              color: state._isOnline
-                                  ? Colors.green
-                                  : Colors.blueGrey.shade800,
-                              shape: BoxShape.circle,
-                            ),
-                          ),
-                          Text(
-                            state._isOnline ? 'Online' : 'Offline',
-                            style: const TextStyle(fontSize: 12),
+                          Row(
+                            children: [
+                              Container(
+                                width: 9,
+                                height: 9,
+                                margin: const EdgeInsets.only(right: 6),
+                                decoration: BoxDecoration(
+                                  color: state._isOnline
+                                      ? Colors.green
+                                      : Colors.blueGrey.shade800,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                              Text(
+                                state._isOnline ? 'Online' : 'Offline',
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                            ],
                           ),
                           Text(
                             style: const TextStyle(
