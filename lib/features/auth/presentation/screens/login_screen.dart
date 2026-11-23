@@ -206,16 +206,13 @@ class _BrandHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Column(
     children: [
-      Icon(Icons.flight_takeoff_rounded, color: AppColors.teal, size: 58),
-      SizedBox(height: 2),
-      const Text(
-        'PharaTrip',
-        style: TextStyle(
-          color: AppColors.darkTeal,
-          fontSize: 27,
-          fontWeight: FontWeight.w800,
-        ),
+      Image.asset(
+        'assets/images/شعار فرحتريب بطابع مصري.png',
+        width: 220,
+        height: 100,
+        fit: BoxFit.contain,
       ),
+      const SizedBox(height: 2),
       Text(
         context.tr('Travel Within Egypt'),
         style: const TextStyle(

@@ -1,0 +1,7 @@
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/أيقونة سفر فرعونية فاخرة.webp"
+  adaptive_icon_background: "#0B9BB5"
+  adaptive_icon_foreground: "assets/images/أيقونة سفر فرعونية فاخرة.webp"
+  remove_alpha_ios: true

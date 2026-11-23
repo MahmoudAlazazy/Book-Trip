@@ -216,21 +216,11 @@ class _Sidebar extends StatelessWidget {
                     ),
                     child: Column(
                       children: [
-                        const Icon(
-                          Icons.travel_explore_rounded,
-                          color: AppColors.teal,
-                          size: 34,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'PharaTrip',
-                          style: TextStyle(
-                            color: dark
-                                ? Colors.white
-                                : const Color(0xFF163D3A),
-                            fontSize: 18,
-                            fontWeight: FontWeight.w800,
-                          ),
+                        Image.asset(
+                          'assets/images/شعار فرحتريب بطابع مصري.png',
+                          width: 170,
+                          height: 72,
+                          fit: BoxFit.contain,
                         ),
                         const SizedBox(height: 28),
                         for (final index in [0, 1, 3])
