@@ -1,6 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:file_picker/file_picker.dart';
 
 import '../../../../core/router/routes.dart';
 import '../../../../core/localization/app_localizations.dart';
@@ -346,10 +349,15 @@ Widget _wideSupportChat(BuildContext context, _SupportChatScreenState state) {
               const Divider(height: 1),
               Expanded(
                 child: ListView(
+                  reverse: false,
                   padding: const EdgeInsets.all(24),
                   children: [
                     for (final message in state._messages)
-                      _chatBubble(message.text, message.sent),
+                      _chatBubble(
+                        message.text,
+                        message.sent,
+                        attachment: state._attachments[message.text],
+                      ),
                     if (state._messages.isEmpty && state._messages.isNotEmpty)
                       _chatBubble(
                         'ممتاز! يسعدني مساعدتك في حجز رحلتك القادمة.',
@@ -393,7 +401,7 @@ Widget _wideSupportChat(BuildContext context, _SupportChatScreenState state) {
   );
 }
 
-Widget _chatBubble(String text, bool sent) => Align(
+Widget _chatBubble(String text, bool sent, {XFile? attachment}) => Align(
   alignment: sent
       ? AlignmentDirectional.centerEnd
       : AlignmentDirectional.centerStart,
@@ -404,10 +412,31 @@ Widget _chatBubble(String text, bool sent) => Align(
       color: sent ? const Color(0xFF0A7D89) : Colors.white,
       borderRadius: BorderRadius.circular(20),
     ),
-    child: Text(
-      text,
-      style: TextStyle(color: sent ? Colors.white : const Color(0xFF163D4B)),
-    ),
+    child: attachment == null
+        ? Text(
+            text,
+            style: TextStyle(
+              color: sent ? Colors.white : const Color(0xFF163D4B),
+            ),
+          )
+        : FutureBuilder<List<int>>(
+            future: attachment.readAsBytes(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const SizedBox(
+                  width: 180,
+                  height: 120,
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              }
+              return Image.memory(
+                Uint8List.fromList(snapshot.data!),
+                width: 220,
+                height: 160,
+                fit: BoxFit.cover,
+              );
+            },
+          ),
   ),
 );
 
@@ -422,6 +451,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
   final _messageController = TextEditingController();
   final _imagePicker = ImagePicker();
   final bool _isOnline = true;
+  final Map<String, XFile> _attachments = {};
   final List<({String text, bool sent})> _messages = [
     (text: 'Hello Ahmed, how can we make your next trip special?', sent: false),
     (text: 'ممتاز! يسعدني مساعدتك في حجز رحلتك القادمة.', sent: true),
@@ -447,9 +477,28 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
   }
 
   Future<void> _pickAttachment() async {
-    final file = await _imagePicker.pickImage(source: ImageSource.gallery);
-    if (file == null || !mounted) return;
-    setState(() => _messages.add((text: '📎 ${file.name}', sent: true)));
+    final result = await FilePicker.platform.pickFiles(
+      allowMultiple: false,
+      withData: true,
+    );
+    if (result == null || result.files.isEmpty || !mounted) return;
+    final picked = result.files.single;
+    final file = picked.bytes != null
+        ? XFile.fromData(picked.bytes!, name: picked.name)
+        : XFile(picked.path!);
+    final message = '📎 ${picked.name}';
+    _attachments[message] = file;
+    _addDummyMessage(message);
+    return;
+
+    // ignore: dead_code
+    {
+      final file = await _imagePicker.pickImage(source: ImageSource.gallery);
+      if (file == null || !mounted) return;
+      _attachments[file.name] = file;
+      _attachments['📎 ${file.name}'] = file;
+      setState(() => _messages.add((text: '📎 ${file.name}', sent: true)));
+    }
   }
 
   @override
