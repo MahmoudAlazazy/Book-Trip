@@ -183,7 +183,11 @@ class _Sidebar extends StatelessWidget {
             height: double.infinity,
             margin: const EdgeInsets.only(left: 18),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(28),
+              // Keep the outer/content-facing edge straight.
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(28),
+                bottomLeft: Radius.circular(28),
+              ),
               border: Border.all(
                 color: dark
                     ? Colors.white.withValues(alpha: .32)
@@ -192,7 +196,10 @@ class _Sidebar extends StatelessWidget {
               ),
             ),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(28),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(28),
+                bottomLeft: Radius.circular(28),
+              ),
               child: Stack(
                 fit: StackFit.expand,
                 children: [
