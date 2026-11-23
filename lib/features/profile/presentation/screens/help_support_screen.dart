@@ -327,9 +327,10 @@ Widget _wideSupportChat(BuildContext context, _SupportChatScreenState state) {
               const Divider(height: 1),
               Expanded(
                 child: ListView(
+                  reverse: true,
                   padding: const EdgeInsets.all(24),
                   children: [
-                    for (final message in state._messages)
+                    for (final message in state._messages.reversed)
                       _chatBubble(message.text, message.sent),
                     _chatBubble(
                       'Hello Ahmed, how can we make your next trip special? ✨',
