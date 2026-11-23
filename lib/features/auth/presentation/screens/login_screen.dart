@@ -207,7 +207,7 @@ class _BrandHeader extends StatelessWidget {
   Widget build(BuildContext context) => Column(
     children: [
       Image.asset(
-        'assets/images/شعار فرحتريب بطابع مصري.png',
+        'assets/images/pharatrip_egyptian_logo.png',
         width: 220,
         height: 100,
         fit: BoxFit.contain,

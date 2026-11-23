@@ -217,7 +217,7 @@ class _Sidebar extends StatelessWidget {
                     child: Column(
                       children: [
                         Image.asset(
-                          'assets/images/شعار فرحتريب بطابع مصري.png',
+                          'assets/images/pharatrip_egyptian_logo.png',
                           width: 170,
                           height: 72,
                           fit: BoxFit.contain,
