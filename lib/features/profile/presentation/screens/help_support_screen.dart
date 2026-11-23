@@ -356,6 +356,7 @@ Widget _wideSupportChat(BuildContext context, _SupportChatScreenState state) {
                       _chatBubble(
                         message.text,
                         message.sent,
+                        time: state._messageTimes[message.text],
                         attachment: state._attachments[message.text],
                       ),
                     if (state._messages.isEmpty && state._messages.isNotEmpty)
@@ -401,7 +402,12 @@ Widget _wideSupportChat(BuildContext context, _SupportChatScreenState state) {
   );
 }
 
-Widget _chatBubble(String text, bool sent, {XFile? attachment}) => Align(
+Widget _chatBubble(
+  String text,
+  bool sent, {
+  DateTime? time,
+  XFile? attachment,
+}) => Align(
   alignment: sent
       ? AlignmentDirectional.centerEnd
       : AlignmentDirectional.centerStart,
@@ -412,14 +418,18 @@ Widget _chatBubble(String text, bool sent, {XFile? attachment}) => Align(
       color: sent ? const Color(0xFF0A7D89) : Colors.white,
       borderRadius: BorderRadius.circular(20),
     ),
-    child: attachment == null
-        ? Text(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        if (attachment == null)
+          Text(
             text,
             style: TextStyle(
               color: sent ? Colors.white : const Color(0xFF163D4B),
             ),
           )
-        : FutureBuilder<List<int>>(
+        else
+          FutureBuilder<List<int>>(
             future: attachment.readAsBytes(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
@@ -437,8 +447,27 @@ Widget _chatBubble(String text, bool sent, {XFile? attachment}) => Align(
               );
             },
           ),
+        if (time != null) ...[
+          const SizedBox(height: 5),
+          Text(
+            _egyptianTime(time),
+            style: TextStyle(
+              color: sent ? Colors.white70 : Colors.blueGrey.shade500,
+              fontSize: 10,
+            ),
+          ),
+        ],
+      ],
+    ),
   ),
 );
+
+String _egyptianTime(DateTime time) {
+  final hour = time.hour % 12 == 0 ? 12 : time.hour % 12;
+  final minute = time.minute.toString().padLeft(2, '0');
+  final period = time.hour >= 12 ? 'م' : 'ص';
+  return '$hour:$minute $period';
+}
 
 class SupportChatScreen extends StatefulWidget {
   const SupportChatScreen({super.key});
@@ -452,6 +481,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
   final _imagePicker = ImagePicker();
   final bool _isOnline = true;
   final Map<String, XFile> _attachments = {};
+  final Map<String, DateTime> _messageTimes = {};
   final List<({String text, bool sent})> _messages = [
     (text: 'Hello Ahmed, how can we make your next trip special?', sent: false),
     (text: 'ممتاز! يسعدني مساعدتك في حجز رحلتك القادمة.', sent: true),
@@ -460,6 +490,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
   // Demo-only chat state: nothing here is persisted or sent to a server.
   void _addDummyMessage(String text) {
     if (text.trim().isEmpty || !mounted) return;
+    _messageTimes[text.trim()] = DateTime.now();
     setState(() => _messages.add((text: text.trim(), sent: true)));
   }
 
