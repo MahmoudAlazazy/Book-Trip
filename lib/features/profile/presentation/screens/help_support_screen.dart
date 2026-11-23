@@ -327,10 +327,9 @@ Widget _wideSupportChat(BuildContext context, _SupportChatScreenState state) {
               const Divider(height: 1),
               Expanded(
                 child: ListView(
-                  reverse: true,
                   padding: const EdgeInsets.all(24),
                   children: [
-                    for (final message in state._messages.reversed)
+                    for (final message in state._messages)
                       _chatBubble(message.text, message.sent),
                     if (state._messages.isEmpty && state._messages.isNotEmpty)
                       _chatBubble(
