@@ -292,8 +292,7 @@ class _SupportSidebarItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final selected =
         appRouter.routerDelegate.currentConfiguration.uri.path == route;
-    const inactive = Colors.white70;
-    final color = selected ? Colors.white : inactive;
+    final color = Colors.black87;
     return Padding(
       padding: const EdgeInsets.only(bottom: 6),
       child: InkWell(
@@ -379,7 +378,7 @@ class _SidebarItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final item = AppBottomNavigationBar._items[index];
     final selected = index == selectedIndex;
-    const inactive = Colors.white70;
+    const inactive = Colors.black87;
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: TweenAnimationBuilder<double>(
@@ -417,7 +416,7 @@ class _SidebarItem extends StatelessWidget {
                 Text(
                   context.tr(item.$3),
                   style: TextStyle(
-                    color: selected ? Colors.white : inactive,
+                    color: Colors.black87,
                     fontWeight: selected ? FontWeight.w800 : FontWeight.w500,
                   ),
                 ),
