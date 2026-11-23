@@ -333,14 +333,9 @@ Widget _wideSupportChat(BuildContext context, _SupportChatScreenState state) {
                     for (final message in state._messages.reversed)
                       _chatBubble(message.text, message.sent),
                     _chatBubble(
-                      'Hello Ahmed, how can we make your next trip special? ✨',
-                      false,
-                    ),
-                    _chatBubble(
                       'ممتاز! يسعدني مساعدتك في حجز رحلتك القادمة.',
                       true,
                     ),
-                    _chatBubble('هل تفضل السفر بالطائرة أم القطار؟', true),
                   ],
                 ),
               ),
