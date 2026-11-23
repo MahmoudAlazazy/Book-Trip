@@ -411,13 +411,17 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
     (text: 'ممتاز! يسعدني مساعدتك في حجز رحلتك القادمة.', sent: true),
   ];
 
+  // Demo-only chat state: nothing here is persisted or sent to a server.
+  void _addDummyMessage(String text) {
+    if (text.trim().isEmpty || !mounted) return;
+    setState(() => _messages.add((text: text.trim(), sent: true)));
+  }
+
   void _sendMessage([String? value]) {
     final text = (value ?? _messageController.text).trim();
     if (text.isEmpty) return;
-    setState(() {
-      _messages.add((text: text, sent: true));
-      _messageController.clear();
-    });
+    _addDummyMessage(text);
+    _messageController.clear();
   }
 
   Future<void> _pickAttachment() async {
