@@ -315,7 +315,26 @@ Widget _wideSupportChat(BuildContext context, _SupportChatScreenState state) {
                             'Travel Support',
                             style: TextStyle(fontWeight: FontWeight.w800),
                           ),
+                          Container(
+                            width: 9,
+                            height: 9,
+                            margin: const EdgeInsets.only(top: 3, bottom: 2),
+                            decoration: BoxDecoration(
+                              color: state._isOnline
+                                  ? Colors.green
+                                  : Colors.blueGrey.shade800,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
                           Text(
+                            state._isOnline ? 'Online' : 'Offline',
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                          Text(
+                            style: const TextStyle(
+                              color: Colors.transparent,
+                              fontSize: 0,
+                            ),
                             '● Online · Usually replies within a few minutes',
                           ),
                         ],
@@ -402,6 +421,7 @@ class SupportChatScreen extends StatefulWidget {
 class _SupportChatScreenState extends State<SupportChatScreen> {
   final _messageController = TextEditingController();
   final _imagePicker = ImagePicker();
+  final bool _isOnline = true;
   final List<({String text, bool sent})> _messages = [
     (text: 'Hello Ahmed, how can we make your next trip special?', sent: false),
     (text: 'ممتاز! يسعدني مساعدتك في حجز رحلتك القادمة.', sent: true),
