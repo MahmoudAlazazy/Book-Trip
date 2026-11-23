@@ -450,11 +450,15 @@ Widget _chatBubble(
                   child: Center(child: CircularProgressIndicator()),
                 );
               }
-              return Image.memory(
-                Uint8List.fromList(snapshot.data!),
-                width: 190,
-                height: 135,
-                fit: BoxFit.cover,
+              final bytes = Uint8List.fromList(snapshot.data!);
+              return GestureDetector(
+                onTap: () => _showAttachmentPreview(context, bytes),
+                child: Image.memory(
+                  bytes,
+                  width: 190,
+                  height: 135,
+                  fit: BoxFit.cover,
+                ),
               );
             },
           ),
@@ -480,6 +484,34 @@ String _egyptianTime(DateTime time) {
   final minute = time.minute.toString().padLeft(2, '0');
   final period = time.hour >= 12 ? 'م' : 'ص';
   return '$hour:$minute $period';
+}
+
+void _showAttachmentPreview(
+  BuildContext context,
+  Uint8List bytes,
+) {
+  showDialog<void>(
+    context: context,
+    barrierColor: Colors.black87,
+    builder: (context) => Dialog(
+      backgroundColor: Colors.transparent,
+      insetPadding: const EdgeInsets.all(16),
+      child: Stack(
+        alignment: Alignment.topRight,
+        children: [
+          InteractiveViewer(
+            minScale: 0.7,
+            maxScale: 4,
+            child: Image.memory(bytes, fit: BoxFit.contain),
+          ),
+          IconButton(
+            onPressed: () => Navigator.of(context).pop(),
+            icon: const Icon(Icons.close, color: Colors.white, size: 30),
+          ),
+        ],
+      ),
+    ),
+  );
 }
 
 class SupportChatScreen extends StatefulWidget {
