@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
@@ -169,7 +171,6 @@ class _Sidebar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final dark = theme.brightness == Brightness.dark;
     return Material(
       color: Colors.transparent,
       child: SafeArea(
@@ -183,26 +184,50 @@ class _Sidebar extends StatelessWidget {
             height: double.infinity,
             margin: const EdgeInsets.only(left: 18),
             decoration: BoxDecoration(
-              // Keep the outer/content-facing edge straight.
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(28),
-                bottomLeft: Radius.circular(28),
+              borderRadius: BorderRadius.circular(30),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  const Color(0xff123c59).withValues(alpha: .9),
+                  const Color(0xff075e67).withValues(alpha: .82),
+                  const Color(0xff071923).withValues(alpha: .95),
+                ],
               ),
               border: Border.all(
-                color: dark
-                    ? Colors.white.withValues(alpha: .32)
-                    : AppColors.teal.withValues(alpha: .24),
-                width: 1.2,
+                color: Colors.white.withValues(alpha: .25),
+                width: 1,
               ),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0x55000000),
+                  blurRadius: 28,
+                  offset: Offset(8, 12),
+                ),
+              ],
             ),
             child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(28),
-                bottomLeft: Radius.circular(28),
-              ),
+              borderRadius: BorderRadius.circular(30),
               child: Stack(
                 fit: StackFit.expand,
                 children: [
+                  BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+                    child: const SizedBox.expand(),
+                  ),
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.white.withValues(alpha: .08),
+                          Colors.transparent,
+                          Colors.black.withValues(alpha: .22),
+                        ],
+                      ),
+                    ),
+                  ),
                   Image.asset(
                     'assets/images/منظر مصري حالِم_ الأهرامات وأبو الهول.webp',
                     fit: BoxFit.cover,
@@ -222,7 +247,7 @@ class _Sidebar extends StatelessWidget {
                           height: 72,
                           fit: BoxFit.contain,
                         ),
-                        const SizedBox(height: 28),
+                        const SizedBox(height: 20),
                         for (final index in [0, 1, 3])
                           _SidebarItem(
                             index: index,
@@ -282,7 +307,7 @@ class _SupportSidebarItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final selected =
         appRouter.routerDelegate.currentConfiguration.uri.path == route;
-    final color = Colors.black87;
+    const color = Colors.white;
     return Padding(
       padding: const EdgeInsets.only(bottom: 6),
       child: InkWell(
@@ -368,7 +393,7 @@ class _SidebarItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final item = AppBottomNavigationBar._items[index];
     final selected = index == selectedIndex;
-    const inactive = Colors.black87;
+    const inactive = Colors.white70;
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: TweenAnimationBuilder<double>(
@@ -406,7 +431,7 @@ class _SidebarItem extends StatelessWidget {
                 Text(
                   context.tr(item.$3),
                   style: TextStyle(
-                    color: Colors.black87,
+                    color: selected ? const Color(0xff10233f) : inactive,
                     fontWeight: selected ? FontWeight.w800 : FontWeight.w500,
                   ),
                 ),
