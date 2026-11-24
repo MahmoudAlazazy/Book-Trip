@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'dart:html' as html;
+
+import 'package:web/web.dart' as web;
 
 import 'package:flutter/widgets.dart';
 
@@ -22,8 +23,8 @@ class SeoHead extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final url = html.window.location.href.split('#').first;
-    html.document.title = title;
+    final url = web.window.location.href.split('#').first;
+    web.document.title = title;
     _meta('description', description);
     _meta('robots', indexable ? 'index, follow' : 'noindex, nofollow');
     _linkCanonical(url);
@@ -45,37 +46,37 @@ class SeoHead extends StatelessWidget {
 
   void _meta(String name, String content) {
     final tag =
-        html.document.head!.querySelector('meta[name="$name"]')
-            as html.MetaElement? ??
-        (html.MetaElement()..name = name);
+        web.document.head!.querySelector('meta[name="$name"]')
+            as web.HTMLMetaElement? ??
+        (web.HTMLMetaElement()..name = name);
     tag.content = content;
-    if (tag.parent == null) html.document.head!.append(tag);
+    if (tag.parentNode == null) web.document.head!.appendChild(tag);
   }
 
   void _property(String property, String content) {
     final tag =
-        html.document.head!.querySelector('meta[property="$property"]')
-            as html.MetaElement? ??
-        (html.MetaElement()..setAttribute('property', property));
+        web.document.head!.querySelector('meta[property="$property"]')
+            as web.HTMLMetaElement? ??
+        (web.HTMLMetaElement()..setAttribute('property', property));
     tag.content = content;
-    if (tag.parent == null) html.document.head!.append(tag);
+    if (tag.parentNode == null) web.document.head!.appendChild(tag);
   }
 
   void _linkCanonical(String href) {
     final link =
-        html.document.head!.querySelector('link[rel="canonical"]')
-            as html.LinkElement? ??
-        (html.LinkElement()..rel = 'canonical');
+        web.document.head!.querySelector('link[rel="canonical"]')
+            as web.HTMLLinkElement? ??
+        (web.HTMLLinkElement()..rel = 'canonical');
     link.href = href;
-    if (link.parent == null) html.document.head!.append(link);
+    if (link.parentNode == null) web.document.head!.appendChild(link);
   }
 
   void _jsonLd(String url) {
-    final old = html.document.head!.querySelector(
+    final old = web.document.head!.querySelector(
       'script[data-pharatrip-schema="website"]',
     );
     old?.remove();
-    final script = html.ScriptElement()
+    final script = web.HTMLScriptElement()
       ..type = 'application/ld+json'
       ..setAttribute('data-pharatrip-schema', 'website')
       ..text = jsonEncode({
@@ -84,8 +85,8 @@ class SeoHead extends StatelessWidget {
         'name': 'PharaTrip',
         'url': url,
         'description': description,
-        if (jsonLdData != null) ...jsonLdData!,
+        ...?jsonLdData,
       });
-    html.document.head!.append(script);
+    web.document.head!.appendChild(script);
   }
 }
