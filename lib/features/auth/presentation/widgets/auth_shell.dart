@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 
+import '../../../../core/theme/app_colors.dart';
+
 class AuthShell extends StatelessWidget {
   const AuthShell({
     required this.child,
@@ -27,7 +29,7 @@ class AuthShell extends StatelessWidget {
                   const Text(
                     'Login|Signup Animation',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: AppColors.teal,
                       fontSize: 34,
                       fontStyle: FontStyle.italic,
                       fontWeight: FontWeight.w500,
@@ -41,67 +43,77 @@ class AuthShell extends StatelessWidget {
                     ),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: const Color(0xff25252b),
-                        border: Border.all(
-                          color: const Color(0xffe46033),
-                          width: 2,
-                        ),
+                        color: const Color(0xff102a3f),
+                        border: Border.all(color: AppColors.teal, width: 2),
                         boxShadow: const [
-                          BoxShadow(color: Color(0x99e46033), blurRadius: 28),
+                          BoxShadow(color: Color(0x99087f8c), blurRadius: 28),
                         ],
                       ),
                       clipBehavior: Clip.antiAlias,
                       child: Row(
                         children: [
                           Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(
-                                28,
-                                18,
-                                28,
-                                18,
+                            flex: 4,
+                            child: Container(
+                              color: const Color(0xff25252b),
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                  28,
+                                  18,
+                                  28,
+                                  18,
+                                ),
+                                child: child,
                               ),
-                              child: child,
                             ),
                           ),
                           Expanded(
-                            child: Container(
-                              padding: const EdgeInsets.all(40),
-                              decoration: const BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    Color(0xffe46033),
-                                    Color(0xff8b3825),
-                                  ],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
+                            flex: 6,
+                            child: ClipPath(
+                              clipper: _SlantedPanelClipper(),
+                              child: Container(
+                                padding: const EdgeInsets.fromLTRB(
+                                  70,
+                                  40,
+                                  40,
+                                  40,
                                 ),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    title.toUpperCase(),
-                                    textAlign: TextAlign.right,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 30,
-                                      fontWeight: FontWeight.w800,
-                                      height: 1.15,
-                                    ),
+                                decoration: const BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Color(0xff087f8c),
+                                      Color(0xff075e67),
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
                                   ),
-                                  const SizedBox(height: 14),
-                                  Text(
-                                    message,
-                                    textAlign: TextAlign.right,
-                                    style: const TextStyle(
-                                      color: Colors.white70,
-                                      fontSize: 16,
-                                      height: 1.5,
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      title.toUpperCase(),
+                                      textAlign: TextAlign.right,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 30,
+                                        fontWeight: FontWeight.w800,
+                                        height: 1.15,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                    const SizedBox(height: 14),
+                                    Text(
+                                      message,
+                                      textAlign: TextAlign.right,
+                                      style: const TextStyle(
+                                        color: Colors.white70,
+                                        fontSize: 16,
+                                        height: 1.5,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -117,7 +129,7 @@ class AuthShell extends StatelessWidget {
               );
 
         return Container(
-          color: desktop ? const Color(0xff1f1f29) : Colors.white,
+          color: desktop ? const Color(0xff071923) : Colors.white,
           alignment: Alignment.center,
           child: SafeArea(
             child: desktop ? content : SingleChildScrollView(child: content),
@@ -126,4 +138,17 @@ class AuthShell extends StatelessWidget {
       },
     );
   }
+}
+
+class _SlantedPanelClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) => Path()
+    ..moveTo(0, 0)
+    ..lineTo(size.width, 0)
+    ..lineTo(size.width, size.height)
+    ..lineTo(size.width * .66, size.height)
+    ..close();
+
+  @override
+  bool shouldReclip(covariant _SlantedPanelClipper oldClipper) => false;
 }

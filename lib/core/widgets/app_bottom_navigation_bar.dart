@@ -411,15 +411,21 @@ class _GlassTripSidebarState extends State<_GlassTripSidebar> {
     padding: const EdgeInsets.only(bottom: 7),
     child: GestureDetector(
       onTap: () => context.go(route),
-      child: Row(
-        children: [
-          Icon(icon, size: 17, color: Colors.white60),
-          const SizedBox(width: 10),
-          Text(
-            context.tr(label),
-            style: const TextStyle(color: Colors.white70, fontSize: 12),
-          ),
-        ],
+      child: Container(
+        height: 58,
+        padding: const EdgeInsets.symmetric(horizontal: 14),
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: .08),
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: Colors.white.withValues(alpha: .18)),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, size: 21, color: Colors.white),
+            const SizedBox(width: 14),
+            Text(context.tr(label), style: const TextStyle(color: Colors.white, fontSize: 14)),
+          ],
+        ),
       ),
     ),
   );
