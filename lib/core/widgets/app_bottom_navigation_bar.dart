@@ -170,7 +170,6 @@ class _Sidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Material(
       color: Colors.transparent,
       child: SafeArea(
@@ -189,9 +188,9 @@ class _Sidebar extends StatelessWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  const Color(0xff123c59).withValues(alpha: .9),
-                  const Color(0xff075e67).withValues(alpha: .82),
-                  const Color(0xff071923).withValues(alpha: .95),
+                  const Color(0xff173d70).withValues(alpha: .92),
+                  const Color(0xff123b72).withValues(alpha: .78),
+                  const Color(0xff07152f).withValues(alpha: .96),
                 ],
               ),
               border: Border.all(
@@ -327,12 +326,12 @@ class _SupportSidebarItem extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
           decoration: BoxDecoration(
             color: selected
-                ? AppColors.teal.withValues(alpha: .72)
-                : Colors.transparent,
+                ? Colors.white
+                : Colors.white.withValues(alpha: .08),
             border: Border.all(
               color: selected
-                  ? Colors.white.withValues(alpha: .72)
-                  : Colors.white24,
+                  ? Colors.transparent
+                  : Colors.white.withValues(alpha: .16),
               width: selected ? 1.2 : 1,
             ),
             borderRadius: BorderRadius.circular(16),
@@ -346,7 +345,7 @@ class _SupportSidebarItem extends StatelessWidget {
                   context.tr(label),
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: color,
+                    color: selected ? const Color(0xff14204a) : color,
                     fontWeight: selected ? FontWeight.w800 : FontWeight.w500,
                   ),
                 ),
@@ -419,12 +418,12 @@ class _SidebarItem extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
             decoration: BoxDecoration(
               color: selected
-                  ? AppColors.teal.withValues(alpha: .72)
-                  : Colors.transparent,
+                  ? Colors.white
+                  : Colors.white.withValues(alpha: .08),
               border: Border.all(
                 color: selected
-                    ? Colors.white.withValues(alpha: .72)
-                    : Colors.white24,
+                    ? Colors.transparent
+                    : Colors.white.withValues(alpha: .16),
                 width: selected ? 1.2 : 1,
               ),
               borderRadius: BorderRadius.circular(16),
@@ -433,7 +432,7 @@ class _SidebarItem extends StatelessWidget {
               children: [
                 Icon(
                   selected ? item.$2 : item.$1,
-                  color: selected ? Colors.white : inactive,
+                  color: selected ? const Color(0xff14204a) : inactive,
                   size: 22,
                 ),
                 const SizedBox(width: 14),
