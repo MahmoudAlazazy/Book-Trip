@@ -21,72 +21,95 @@ class AuthShell extends StatelessWidget {
         // the existing PharaTrip shell and spacing.
         final desktop = kIsWeb && constraints.maxWidth >= 820;
         final content = desktop
-            ? ConstrainedBox(
-                constraints: const BoxConstraints(
-                  maxWidth: 1100,
-                  maxHeight: 680,
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: const Color(0xff25252b),
-                    border: Border.all(
-                      color: const Color(0xffe46033),
-                      width: 2,
+            ? Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    'Login|Signup Animation',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 34,
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.w500,
                     ),
-                    boxShadow: const [
-                      BoxShadow(color: Color(0x99e46033), blurRadius: 28),
-                    ],
                   ),
-                  clipBehavior: Clip.antiAlias,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(46),
-                          child: child,
+                  const SizedBox(height: 34),
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      maxWidth: 750,
+                      maxHeight: 450,
+                    ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: const Color(0xff25252b),
+                        border: Border.all(
+                          color: const Color(0xffe46033),
+                          width: 2,
                         ),
+                        boxShadow: const [
+                          BoxShadow(color: Color(0x99e46033), blurRadius: 28),
+                        ],
                       ),
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.all(52),
-                          decoration: const BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [Color(0xffe46033), Color(0xff8b3825)],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
+                      clipBehavior: Clip.antiAlias,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(
+                                28,
+                                18,
+                                28,
+                                18,
+                              ),
+                              child: child,
                             ),
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                title.toUpperCase(),
-                                textAlign: TextAlign.right,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 38,
-                                  fontWeight: FontWeight.w800,
-                                  height: 1.15,
+                          Expanded(
+                            child: Container(
+                              padding: const EdgeInsets.all(40),
+                              decoration: const BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Color(0xffe46033),
+                                    Color(0xff8b3825),
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
                                 ),
                               ),
-                              const SizedBox(height: 14),
-                              Text(
-                                message,
-                                textAlign: TextAlign.right,
-                                style: const TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 16,
-                                  height: 1.5,
-                                ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    title.toUpperCase(),
+                                    textAlign: TextAlign.right,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.w800,
+                                      height: 1.15,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 14),
+                                  Text(
+                                    message,
+                                    textAlign: TextAlign.right,
+                                    style: const TextStyle(
+                                      color: Colors.white70,
+                                      fontSize: 16,
+                                      height: 1.5,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               )
             : Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18),

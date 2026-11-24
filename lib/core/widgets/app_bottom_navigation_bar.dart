@@ -64,13 +64,13 @@ class AppNavigationBody extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SizedBox(
-                width: 248,
+                width: 280,
                 child: ClipRect(
                   child: MediaQuery.removePadding(
                     context: context,
                     removeTop: true,
                     removeBottom: true,
-                    child: _Sidebar(selectedIndex: selectedIndex),
+                    child: _GlassTripSidebar(selectedIndex: selectedIndex),
                   ),
                 ),
               ),
@@ -164,6 +164,129 @@ class _BottomBar extends StatelessWidget {
   }
 }
 
+class _GlassTripSidebar extends StatefulWidget {
+  const _GlassTripSidebar({required this.selectedIndex});
+  final int selectedIndex;
+
+  @override
+  State<_GlassTripSidebar> createState() => _GlassTripSidebarState();
+}
+
+class _GlassTripSidebarState extends State<_GlassTripSidebar> {
+  bool expanded = true;
+
+  static const _menu = [
+    (Icons.home_outlined, 'Home', AppRoutes.home),
+    (Icons.explore_outlined, 'Explore', AppRoutes.explore),
+    (Icons.bookmark_border, 'Saved', AppRoutes.favorites),
+    (Icons.luggage_outlined, 'My Trips', AppRoutes.myTrips),
+    (Icons.person_outline, 'Profile', AppRoutes.profile),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final width = expanded ? 252.0 : 68.0;
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 550),
+        curve: Curves.easeInOutCubic,
+        width: width,
+        height: expanded ? 640 : 580,
+        margin: const EdgeInsets.only(left: 18),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(32),
+          boxShadow: const [BoxShadow(color: Color(0x77000000), blurRadius: 40, offset: Offset(0, 20))],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(32),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [Colors.white.withValues(alpha: .22), const Color(0xff2a4a9a).withValues(alpha: .45), const Color(0xff0b1a4a).withValues(alpha: .88)],
+                ),
+                border: Border.all(color: Colors.white.withValues(alpha: .28)),
+              ),
+              child: expanded ? _expanded(context) : _collapsed(context),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _brand({required bool small}) => GestureDetector(
+        onTap: () => setState(() => expanded = !expanded),
+        child: Container(
+          width: small ? 38 : 38,
+          height: 38,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white.withValues(alpha: .14), border: Border.all(color: Colors.white38)),
+          child: const Icon(Icons.travel_explore, color: Colors.white, size: 18),
+        ),
+      );
+
+  Widget _collapsed(BuildContext context) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 14),
+        child: Column(children: [
+          _brand(small: true),
+          const SizedBox(height: 12),
+          const Icon(Icons.search, color: Colors.white70, size: 20),
+          const SizedBox(height: 14),
+          for (var i = 0; i < _menu.length; i++) _iconItem(context, i),
+          const Spacer(),
+          _avatar(),
+        ]),
+      );
+
+  Widget _iconItem(BuildContext context, int i) {
+    final selected = widget.selectedIndex == i;
+    return GestureDetector(
+      onTap: () => context.go(_menu[i].$3),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 5),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 380),
+          width: 38,
+          height: 38,
+          decoration: BoxDecoration(shape: BoxShape.circle, color: selected ? Colors.white : Colors.white.withValues(alpha: .10), border: Border.all(color: Colors.white.withValues(alpha: .16))),
+          child: Icon(_menu[i].$1, size: 19, color: selected ? const Color(0xff14204a) : Colors.white70),
+        ),
+      ),
+    );
+  }
+
+  Widget _expanded(BuildContext context) => Padding(
+        padding: const EdgeInsets.fromLTRB(10, 12, 8, 12),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Row(children: [_brand(small: false), const SizedBox(width: 10), const Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text('PharaTrip', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700)), Text('Explore Egypt', style: TextStyle(color: Colors.white54, fontSize: 10))])), GestureDetector(onTap: () => setState(() => expanded = false), child: const Icon(Icons.chevron_left, color: Colors.white70))]),
+          const SizedBox(height: 12),
+          Container(height: 36, padding: const EdgeInsets.symmetric(horizontal: 12), decoration: BoxDecoration(color: Colors.white.withValues(alpha: .10), borderRadius: BorderRadius.circular(18), border: Border.all(color: Colors.white24)), child: const Row(children: [Icon(Icons.search, size: 16, color: Colors.white54), SizedBox(width: 8), Text('Search trips...', style: TextStyle(color: Colors.white38, fontSize: 12))])),
+          const SizedBox(height: 14),
+          for (var i = 0; i < _menu.length; i++) _row(context, i),
+          const Padding(padding: EdgeInsets.symmetric(vertical: 8), child: Divider(color: Colors.white24)),
+          _support(context, Icons.auto_awesome, 'FAQ', AppRoutes.faq),
+          _support(context, Icons.chat_bubble_outline, 'Chat with Support', AppRoutes.supportChat),
+          _support(context, Icons.mail_outline, 'Contact Us', AppRoutes.contactSupport),
+          const Spacer(),
+          _support(context, Icons.logout_rounded, 'Log out', AppRoutes.login),
+        ]),
+      );
+
+  Widget _row(BuildContext context, int i) {
+    final selected = widget.selectedIndex == i;
+    return GestureDetector(onTap: () => context.go(_menu[i].$3), child: AnimatedContainer(duration: const Duration(milliseconds: 380), height: 40, margin: const EdgeInsets.only(bottom: 10), padding: const EdgeInsets.symmetric(horizontal: 12), decoration: BoxDecoration(color: selected ? Colors.white : Colors.white.withValues(alpha: .10), borderRadius: BorderRadius.circular(20), border: Border.all(color: selected ? Colors.transparent : Colors.white24)), child: Row(children: [Icon(_menu[i].$1, size: 17, color: selected ? const Color(0xff14204a) : Colors.white70), const SizedBox(width: 10), Text(context.tr(_menu[i].$2), style: TextStyle(color: selected ? const Color(0xff14204a) : Colors.white, fontWeight: FontWeight.w600, fontSize: 13))])));
+  }
+
+  Widget _support(BuildContext context, IconData icon, String label, String route) => Padding(padding: const EdgeInsets.only(bottom: 7), child: GestureDetector(onTap: () => context.go(route), child: Row(children: [Icon(icon, size: 17, color: Colors.white60), const SizedBox(width: 10), Text(context.tr(label), style: const TextStyle(color: Colors.white70, fontSize: 12))])));
+
+  Widget _avatar() => Container(width: 34, height: 34, alignment: Alignment.center, decoration: const BoxDecoration(shape: BoxShape.circle, gradient: LinearGradient(colors: [Color(0xffffb38a), Color(0xffff7a59)])), child: const Text('A', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700)));
+}
+
 class _Sidebar extends StatelessWidget {
   const _Sidebar({required this.selectedIndex});
   final int selectedIndex;
@@ -179,7 +302,7 @@ class _Sidebar extends StatelessWidget {
         child: Align(
           alignment: Alignment.centerLeft,
           child: Container(
-            width: 230,
+            width: 252,
             height: double.infinity,
             margin: const EdgeInsets.only(left: 18),
             decoration: BoxDecoration(
@@ -255,7 +378,36 @@ class _Sidebar extends StatelessWidget {
                           height: 72,
                           fit: BoxFit.contain,
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 10),
+                        Container(
+                          height: 36,
+                          margin: const EdgeInsets.only(bottom: 14),
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: .10),
+                            borderRadius: BorderRadius.circular(18),
+                            border: Border.all(
+                              color: Colors.white.withValues(alpha: .16),
+                            ),
+                          ),
+                          child: const Row(
+                            children: [
+                              Icon(
+                                Icons.search,
+                                size: 16,
+                                color: Colors.white60,
+                              ),
+                              SizedBox(width: 8),
+                              Text(
+                                'Search trips...',
+                                style: TextStyle(
+                                  color: Colors.white54,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                         for (final index in [0, 1, 3])
                           _SidebarItem(
                             index: index,
@@ -323,7 +475,7 @@ class _SupportSidebarItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           decoration: BoxDecoration(
             color: selected
                 ? Colors.white
@@ -368,7 +520,7 @@ class _LogoutItem extends StatelessWidget {
         onTap: () => context.go(AppRoutes.login),
         borderRadius: BorderRadius.circular(16),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           decoration: BoxDecoration(
             border: Border.all(color: color, width: 1.2),
             borderRadius: BorderRadius.circular(16),
