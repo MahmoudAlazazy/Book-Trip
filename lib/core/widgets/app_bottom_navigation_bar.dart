@@ -233,6 +233,15 @@ class _Sidebar extends StatelessWidget {
                     fit: BoxFit.cover,
                     alignment: Alignment.bottomCenter,
                   ),
+                  const DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Color(0xee123c59), Color(0xf5071923)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 14,
