@@ -29,16 +29,6 @@ class AuthShell extends StatelessWidget {
               ? Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text(
-                      'Login|Signup Animation',
-                      style: TextStyle(
-                        color: AppColors.teal,
-                        fontSize: 34,
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(height: 34),
                     ConstrainedBox(
                       constraints: const BoxConstraints(
                         maxWidth: 1100,
