@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 
 import '../router/app_router.dart';
 import '../router/routes.dart';
+import '../auth/auth_session.dart';
 import '../localization/app_localizations.dart';
 import '../theme/app_colors.dart';
 import '../theme/theme_controller.dart';
@@ -685,7 +686,10 @@ class _GlassTripSidebarState extends ConsumerState<_GlassTripSidebar> {
 
   Widget _collapsedAction(BuildContext context, IconData icon, String route) {
     return GestureDetector(
-      onTap: () => appRouter.go(route),
+      onTap: () async {
+        if (route == AppRoutes.login) await AuthSession.clear();
+        if (context.mounted) context.go(route);
+      },
       child: Padding(
         padding: EdgeInsets.zero,
         child: Container(
@@ -833,7 +837,10 @@ class _GlassTripSidebarState extends ConsumerState<_GlassTripSidebar> {
   ) => Padding(
     padding: const EdgeInsets.only(bottom: 7),
     child: GestureDetector(
-      onTap: () => context.go(route),
+      onTap: () async {
+        if (route == AppRoutes.login) await AuthSession.clear();
+        if (context.mounted) context.go(route);
+      },
       child: Container(
         height: 58,
         padding: const EdgeInsets.symmetric(horizontal: 14),
@@ -1100,7 +1107,10 @@ class _LogoutItem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: InkWell(
-        onTap: () => context.go(AppRoutes.login),
+        onTap: () async {
+          await AuthSession.clear();
+          if (context.mounted) context.go(AppRoutes.login);
+        },
         borderRadius: BorderRadius.circular(16),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
