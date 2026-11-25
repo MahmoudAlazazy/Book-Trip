@@ -60,7 +60,7 @@ class AuthShell extends StatelessWidget {
                             Expanded(
                               flex: 4,
                               child: Container(
-                                color: const Color(0xff25252b),
+                                color: const Color(0xfff8fafa),
                                 child: Padding(
                                   padding: const EdgeInsets.fromLTRB(
                                     28,
@@ -134,7 +134,7 @@ class AuthShell extends StatelessWidget {
                 );
 
           return Container(
-            color: desktop ? const Color(0xff071923) : Colors.white,
+            color: Colors.white,
             alignment: Alignment.center,
             child: SafeArea(
               child: desktop ? content : SingleChildScrollView(child: content),
