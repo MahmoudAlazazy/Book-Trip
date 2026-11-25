@@ -41,10 +41,12 @@ class AuthShell extends StatelessWidget {
                     const SizedBox(height: 34),
                     ConstrainedBox(
                       constraints: const BoxConstraints(
-                        maxWidth: 750,
-                        maxHeight: 450,
+                        maxWidth: 1100,
+                        maxHeight: 650,
                       ),
                       child: Container(
+                        width: constraints.maxWidth * .9,
+                        height: constraints.maxHeight * .82,
                         decoration: BoxDecoration(
                           color: const Color(0xff102a3f),
                           border: Border.all(color: AppColors.teal, width: 2),
