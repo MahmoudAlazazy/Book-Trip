@@ -31,6 +31,10 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
     _timer?.cancel();
     setState(() => _seconds = 45);
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
       if (_seconds == 0) {
         timer.cancel();
       } else {

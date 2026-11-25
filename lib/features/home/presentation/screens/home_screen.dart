@@ -375,19 +375,32 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       width: double.infinity,
       child: Stack(
         fit: StackFit.expand,
+        clipBehavior: Clip.none,
         children: [
-          AppImage(
-            asset: 'assets/images/Golden Sunset Over the Pyramids.png',
-            fit: BoxFit.cover,
-            alignment: Alignment.center,
-            cacheWidth: 1400,
+          Positioned(
+            left: -108,
+            right: 0,
+            top: 0,
+            bottom: 0,
+            child: AppImage(
+              asset: 'assets/images/Golden Sunset Over the Pyramids.png',
+              fit: BoxFit.cover,
+              alignment: Alignment.center,
+              cacheWidth: 1400,
+            ),
           ),
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Colors.transparent, Color(0xBB000000)],
+          Positioned(
+            left: -108,
+            right: 0,
+            top: 0,
+            bottom: 0,
+            child: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Colors.transparent, Color(0xBB000000)],
+                ),
               ),
             ),
           ),

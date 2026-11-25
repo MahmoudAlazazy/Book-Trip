@@ -28,6 +28,28 @@ import '../seo/seo_head.dart';
 import '../../features/trips/data/trip_catalog.dart';
 
 Widget _lightOnly(Widget child) => Theme(data: AppTheme.light, child: child);
+
+Page<void> _authPage(Widget child, LocalKey key) => CustomTransitionPage<void>(
+  key: key,
+  child: _lightOnly(child),
+  transitionDuration: const Duration(milliseconds: 650),
+  reverseTransitionDuration: const Duration(milliseconds: 500),
+  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+    final curved = CurvedAnimation(
+      parent: animation,
+      curve: Curves.easeOutCubic,
+      reverseCurve: Curves.easeInCubic,
+    );
+    final slide = Tween<Offset>(
+      begin: const Offset(.12, 0),
+      end: Offset.zero,
+    ).animate(curved);
+    return FadeTransition(
+      opacity: curved,
+      child: SlideTransition(position: slide, child: child),
+    );
+  },
+);
 Widget _seo(
   Widget child,
   String title,
@@ -38,7 +60,13 @@ Widget _seo(
 }) => Stack(
   children: [
     child,
-    SeoHead(title: title, description: description, jsonLdType: jsonLdType, jsonLdData: jsonLdData, indexable: indexable),
+    SeoHead(
+      title: title,
+      description: description,
+      jsonLdType: jsonLdType,
+      jsonLdData: jsonLdData,
+      indexable: indexable,
+    ),
   ],
 );
 
@@ -69,31 +97,39 @@ final appRouter = GoRouter(
       builder: (_, state) {
         final id = state.pathParameters['id']!;
         final trip = TripCatalog.byId[id];
-        final title = trip == null ? 'Egypt Trip | PharaTrip' : '${trip.title} in Egypt | PharaTrip';
+        final title = trip == null
+            ? 'Egypt Trip | PharaTrip'
+            : '${trip.title} in Egypt | PharaTrip';
         final description = trip == null
             ? 'Explore Egypt trips and plan your next adventure with PharaTrip.'
             : 'Book ${trip.title} in ${trip.location}. ${trip.duration} Egypt trip from ${trip.price} with PharaTrip.';
-        return Stack(children: [
-          TripDetailsScreen(id: id),
-          SeoHead(
-            title: title,
-            description: description,
-            image: trip?.image,
-            jsonLdType: 'Product',
-            jsonLdData: trip == null ? null : {
-              'image': 'https://pharatrip.com/${trip.image.replaceFirst('assets/', '')}',
-              'sku': id,
-              'brand': {'@type': 'Brand', 'name': 'PharaTrip'},
-              'category': 'Egypt travel tour',
-              'offers': {
-                '@type': 'Offer', 'priceCurrency': 'EGP',
-                'price': trip.price.replaceAll(RegExp(r'[^0-9]'), ''),
-                'availability': 'https://schema.org/InStock',
-                'url': 'https://pharatrip.com/trip/$id',
-              },
-            },
-          ),
-        ]);
+        return Stack(
+          children: [
+            TripDetailsScreen(id: id),
+            SeoHead(
+              title: title,
+              description: description,
+              image: trip?.image,
+              jsonLdType: 'Product',
+              jsonLdData: trip == null
+                  ? null
+                  : {
+                      'image':
+                          'https://pharatrip.com/${trip.image.replaceFirst('assets/', '')}',
+                      'sku': id,
+                      'brand': {'@type': 'Brand', 'name': 'PharaTrip'},
+                      'category': 'Egypt travel tour',
+                      'offers': {
+                        '@type': 'Offer',
+                        'priceCurrency': 'EGP',
+                        'price': trip.price.replaceAll(RegExp(r'[^0-9]'), ''),
+                        'availability': 'https://schema.org/InStock',
+                        'url': 'https://pharatrip.com/trip/$id',
+                      },
+                    },
+            ),
+          ],
+        );
       },
     ),
     GoRoute(
@@ -130,19 +166,21 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: AppRoutes.login,
-      builder: (_, _) => _lightOnly(const LoginScreen()),
+      pageBuilder: (_, state) => _authPage(const LoginScreen(), state.pageKey),
     ),
     GoRoute(
       path: AppRoutes.signup,
-      builder: (_, _) => _lightOnly(const SignupScreen()),
+      pageBuilder: (_, state) => _authPage(const SignupScreen(), state.pageKey),
     ),
     GoRoute(
       path: AppRoutes.verify,
-      builder: (_, _) => _lightOnly(const VerifyPhoneScreen()),
+      pageBuilder: (_, state) =>
+          _authPage(const VerifyPhoneScreen(), state.pageKey),
     ),
     GoRoute(
       path: AppRoutes.reset,
-      builder: (_, _) => _lightOnly(const ResetPasswordScreen()),
+      pageBuilder: (_, state) =>
+          _authPage(const ResetPasswordScreen(), state.pageKey),
     ),
     GoRoute(path: AppRoutes.myTrips, builder: (_, _) => const MyTripsScreen()),
     GoRoute(
@@ -153,7 +191,11 @@ final appRouter = GoRouter(
         'Browse available tours and getaways across Egypt with PharaTrip.',
         jsonLdType: 'CollectionPage',
         jsonLdData: {
-          'isPartOf': {'@type': 'WebSite', 'name': 'PharaTrip', 'url': 'https://pharatrip.com/'},
+          'isPartOf': {
+            '@type': 'WebSite',
+            'name': 'PharaTrip',
+            'url': 'https://pharatrip.com/',
+          },
         },
       ),
     ),

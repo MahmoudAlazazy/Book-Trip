@@ -187,7 +187,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 crossAxisCount: 2,
-                childAspectRatio: 1.55,
+                // The stat content (value, spacing, and label) needs more
+                // vertical room than the previous ratio provided.
+                childAspectRatio: 4.0,
                 children: [
                   _stat('10', context.tr('Saved Destinations'), text),
                   _stat('20', context.tr('Completed Trips'), AppColors.teal),
@@ -302,6 +304,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   }
 
   Widget _stat(String value, String label, Color color) => Column(
+    mainAxisSize: MainAxisSize.min,
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
       Text(

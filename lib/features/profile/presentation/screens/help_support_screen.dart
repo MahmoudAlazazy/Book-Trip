@@ -278,13 +278,17 @@ class FrequentlyAskedQuestionsScreen extends StatelessWidget {
 }
 
 Widget _wideSupportChat(BuildContext context, _SupportChatScreenState state) {
+  final dark = Theme.of(context).brightness == Brightness.dark;
+  final scheme = Theme.of(context).colorScheme;
   return Row(
     children: [
       Expanded(
         child: Card(
           margin: EdgeInsets.zero,
           elevation: 0,
-          color: const Color(0xFFF5F9FC),
+          color: dark
+              ? scheme.surfaceContainerHighest
+              : const Color(0xFFF5F9FC),
           clipBehavior: Clip.antiAlias,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(22),
@@ -306,8 +310,9 @@ Widget _wideSupportChat(BuildContext context, _SupportChatScreenState state) {
                 child: Row(
                   children: [
                     const CircleAvatar(
-                      backgroundColor: AppColors.teal,
-                      child: Icon(Icons.support_agent, color: Colors.white),
+                      backgroundImage: AssetImage(
+                        'assets/images/onboarding_egypt_culture.jpg',
+                      ),
                     ),
                     Expanded(
                       child: Column(
@@ -315,7 +320,7 @@ Widget _wideSupportChat(BuildContext context, _SupportChatScreenState state) {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Travel Support',
+                            'Mahmoud Al AzaZy',
                             style: TextStyle(fontWeight: FontWeight.w800),
                           ),
                           Row(
@@ -358,6 +363,7 @@ Widget _wideSupportChat(BuildContext context, _SupportChatScreenState state) {
                   children: [
                     for (final message in state._messages)
                       _chatBubble(
+                        context,
                         message.text,
                         message.sent,
                         time: state._messageTimes[message.text],
@@ -365,6 +371,7 @@ Widget _wideSupportChat(BuildContext context, _SupportChatScreenState state) {
                       ),
                     if (state._messages.isEmpty && state._messages.isNotEmpty)
                       _chatBubble(
+                        context,
                         'ممتاز! يسعدني مساعدتك في حجز رحلتك القادمة.',
                         true,
                       ),
@@ -379,7 +386,7 @@ Widget _wideSupportChat(BuildContext context, _SupportChatScreenState state) {
                   decoration: InputDecoration(
                     hintText: 'Type your message...',
                     filled: true,
-                    fillColor: Colors.white,
+                    fillColor: dark ? scheme.surface : Colors.white,
                     prefixIcon: IconButton(
                       onPressed: state._pickAttachment,
                       icon: const Icon(
@@ -393,7 +400,20 @@ Widget _wideSupportChat(BuildContext context, _SupportChatScreenState state) {
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(28),
-                      borderSide: BorderSide.none,
+                      borderSide: BorderSide(
+                        color: dark ? Colors.white24 : Colors.black12,
+                        width: 1,
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(28),
+                      borderSide: BorderSide(
+                        color: dark ? Colors.white24 : Colors.black12,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(28),
+                      borderSide: BorderSide(color: AppColors.teal, width: 1.5),
                     ),
                   ),
                 ),
@@ -407,6 +427,7 @@ Widget _wideSupportChat(BuildContext context, _SupportChatScreenState state) {
 }
 
 Widget _chatBubble(
+  BuildContext context,
   String text,
   bool sent, {
   DateTime? time,
@@ -422,8 +443,14 @@ Widget _chatBubble(
         : const EdgeInsets.all(6),
     decoration: BoxDecoration(
       color: attachment == null
-          ? (sent ? const Color(0xFF0A7D89) : Colors.white)
-          : const Color(0xFFF8FAFB),
+          ? (sent
+                ? const Color(0xFF0A7D89)
+                : (Theme.of(context).brightness == Brightness.dark
+                      ? Theme.of(context).colorScheme.surfaceContainerHighest
+                      : Colors.white))
+          : (Theme.of(context).brightness == Brightness.dark
+                ? Theme.of(context).colorScheme.surfaceContainerHighest
+                : const Color(0xFFF8FAFB)),
       border: attachment == null
           ? null
           : Border.all(color: const Color(0xFFD8DEE2), width: 1),
@@ -436,7 +463,11 @@ Widget _chatBubble(
           Text(
             text,
             style: TextStyle(
-              color: sent ? Colors.white : const Color(0xFF163D4B),
+              color: sent
+                  ? Colors.white
+                  : (Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : const Color(0xFF163D4B)),
             ),
           )
         else
@@ -486,10 +517,7 @@ String _egyptianTime(DateTime time) {
   return '$hour:$minute $period';
 }
 
-void _showAttachmentPreview(
-  BuildContext context,
-  Uint8List bytes,
-) {
+void _showAttachmentPreview(BuildContext context, Uint8List bytes) {
   showDialog<void>(
     context: context,
     barrierColor: Colors.black87,
